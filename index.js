@@ -15,7 +15,6 @@ class Client {
   constructor(serverless, cliOptions) {
     this.error = serverless.classes.Error;
     this.serverless = serverless;
-    this.options = serverless.service.custom.client;
     this.cliOptions = cliOptions || {};
     this.aws = this.serverless.getProvider('aws');
 
@@ -50,6 +49,7 @@ class Client {
   }
 
   _validateConfig() {
+    this.options = this.serverless.service.custom.client;
     try {
       validateClient(this.serverless, this.options);
     } catch (e) {
@@ -59,7 +59,6 @@ class Client {
   }
 
   _removeDeployedResources() {
-
     let bucketName, manageResources, keyPrefix;
 
     return this._validateConfig()
@@ -95,7 +94,6 @@ class Client {
                   }
                 })
                 .then(() => {
-
                   if (manageResources === false) {
                     this.serverless.cli.log(`Success! Your files have been removed`);
                   } else {
@@ -257,9 +255,7 @@ class Client {
             })
             .then(() => {
               this.serverless.cli.log(
-                `Success! Your site should be available at http://${bucketName}.${
-                  regionUrls[region]
-                }/`
+                `Success! Your site should be available at http://${bucketName}.${regionUrls[region]}/`
               );
             });
         }
